@@ -1,0 +1,14 @@
+# 忽略编译和安装文件夹
+build/
+devel/
+install/  # 新增：适配 ROS 2/Colcon
+log/      # 新增：匹配你当前的 log 文件夹
+logs/     
+
+# 忽略临时文件
+*.pyc     
+.DS_Store 
+
+# 忽略日志和仿真轨迹
+*.ulg     
+*.log

@@ -1,0 +1,3 @@
+source;share/small_point_lio/environment/ament_prefix_path.sh
+source;share/small_point_lio/environment/library_path.sh
+source;share/small_point_lio/environment/path.sh

@@ -1,6 +1,4 @@
-PX4 + ROS2 Humble + Gazebo Harmonic 集成开发框架
-
-本项目是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航系统。集成了 Livox 点云处理、Small-Point-LIO 里程计以及 EGO-Planner 路径规划，实现了从感知到规划再到控制的全流程闭环。
+本项目是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航系统。集成了micro-xrce-dds、Small-Point-LIO 里程计以及 EGO-Planner 路径规划，实现了从感知到规划再到控制的全流程闭环。
 🛠 1. 环境依赖 (Prerequisites)
 
 在运行本项目前，请确保您的开发环境已配置以下核心组件：

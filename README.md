@@ -1,10 +1,20 @@
-本项目分为main和fast两个分支。main分支是采用ego-planner的常规导航，飞行平缓。fast分支采用了super，极大提高了无人机在复杂地形中的飞行速度，并且在px4_ctrl控制节点中加入了闭环控制。
+PX4 & ROS2 无人机自主飞行系统
 
-fast分支无人机仿真演示
+本项目是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航框架，实现了从感知、里程计到路径规划与控制的全流程闭环。
 
-![演示动画](docs/demo.gif)
+🌿 分支说明 (Branches)
 
-main分支是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航系统。集成了micro-xrce-dds、Small-Point-LIO 里程计以及 EGO-Planner 路径规划，实现了从感知到规划再到控制的全流程闭环。
+项目目前维护两个核心分支，分别对应不同的应用场景：
+
+    main 分支：采用 EGO-Planner 的常规导航模式，飞行轨迹平滑稳定，适用于大多数通用场景。
+
+    fast 分支（推荐）：采用更激进的 Super-Planner，极大提升了复杂地形下的避障速度，并在 px4_ctrl 中集成了闭环控制算法。
+
+📺 快速演示 (Fast Branch Demo)
+
+    当前分支：fast 展示了无人机在复杂障碍物环境下的高速穿梭性能。
+
+    ![演示动画](docs/demo.gif)
 
 🛠 1. 环境依赖 (Prerequisites)
 
@@ -24,43 +34,40 @@ ROS2	Humble Hawksbill	机器人操作系统
 
 项目工作空间包含以下关键功能包：
 
-    gz_ros_plugin: 桥接层，负责将 Gazebo 中的传感器原始数据转换为 ROS2 标准话题。
+    gz_ros_plugin: 桥接层，负责将 Gazebo 中的传感器数据转换为 ROS2 标准话题。
 
-    livox_ros_driver2: Livox 激光雷达的消息类型定义及驱动支持。
+    small_point_lio: 轻量化激光惯性里程计，提供高精度位姿数据。
 
-    px4_msgs: 包含 PX4 固件定义的标准 uORB 消息对应的 ROS2 消息格式。
+    visual_odom_bridge: 转换插件，将 LIO 位姿转化为 PX4 外部定位数据 (External Vision)。
 
-    small_point_lio: 轻量化激光惯性里程计，为规划器提供高精度的里程计数据和点云。
+    ego_ros2: 核心规划器，基于 EGO-Planner 生成平滑避障路径。
 
-    visual_odom_bridge: 转换插件，将 small_point_lio 的位姿转化为 PX4 可识别的外部定位数据。
+    px4_ctrl: 控制节点，将规划指令封装为 Offboard 指令发送给飞控。
 
-    ego_ros2: 核心规划器，基于 EGO-Planner 算法根据目标点生成平滑的避障路径。
-
-    px4_ctrl: 控制节点，订阅规划器命令并将其封装为 Offboard 指令发送给飞控。
-
-    key.py: 交互脚本，通过键盘终端快速发送起飞、模式切换等控制指令。
+    key.py: 交互脚本，通过终端键盘快速发送指令。
 
 🚀 3. 运行指南 (Execution Guide)
 
 请按照以下顺序在不同的终端窗口中启动节点：
+
 第一步：启动 SLAM 与里程计
 
 解析雷达数据并建立实时里程计。
-Bash
+
 
 ros2 launch small_point_lio small_point_lio.launch.py
 
 第二步：启动定位转接 (Odom Bridge)
 
-将视觉/激光里程计反馈给 PX4 飞控，实现外部定位。
-Bash
+将里程计反馈给 PX4 飞控，实现外部定位闭环。
+
 
 ros2 run visual_odom_bridge visual_odom_bridge
 
 第三步：启动规划器与可视化
 
-启动 EGO-Planner 核心算法及 Rviz2 监控界面。
-Bash
+启动规划算法及 Rviz2 实时监控界面。
+
 
 # 启动规划节点
 ros2 launch ego_planner single_uav_gazebo.launch.py
@@ -71,17 +78,30 @@ ros2 launch ego_planner rviz.launch.py
 第四步：启动控制与交互
 
 启动控制逻辑并使用键盘脚本接管无人机。
-Bash
+
 
 # 1. 启动控制节点
+
 ros2 run px4_ctrl offboard_control
 
 # 2. 运行键盘控制脚本
+
 python3 key.py
 
 🎮 4. 指令交互 (Command Table)
 
-在 key.py 运行的终端中，可以使用以下快捷键：
-按键	功能描述
-t	Takeoff: 自动解锁、起飞并进入悬停状态
-o	Offboard: 切换至 Offboard 模式，开始执行规划器路径
+在运行 key.py 的终端中，使用以下快捷键控制无人机：
+
+按键	功能描述	动作说明
+
+t	Takeoff	自动解锁、起飞并进入悬停状态
+
+o	Offboard	切换至 Offboard 模式，开始执行规划路径
+
+l	Land	触发自动着陆程序
+
+💡 小贴士
+
+    确保在启动任何节点前，MicroXRCEAgent 已经成功连接。
+
+    如果在 fast 分支运行，请确保 px4_ctrl 参数已针对高速飞行完成调优。

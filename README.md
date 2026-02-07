@@ -1,6 +1,6 @@
 本项目分为main和fast两个分支。main分支是采用ego-planner的常规导航，飞行平缓。fast分支采用了super，极大提高了无人机在复杂地形中的飞行速度，并且在px4_ctrl控制节点中加入了闭环控制。
 
-是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航系统。集成了micro-xrce-dds、Small-Point-LIO 里程计以及 EGO-Planner 路径规划，实现了从感知到规划再到控制的全流程闭环。
+main分支是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航系统。集成了micro-xrce-dds、Small-Point-LIO 里程计以及 EGO-Planner 路径规划，实现了从感知到规划再到控制的全流程闭环。
 
 🛠 1. 环境依赖 (Prerequisites)
 

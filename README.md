@@ -1,12 +1,19 @@
 本项目是一个基于 ROS2 Humble 和 PX4 的无人机仿真与导航系统。集成了micro-xrce-dds、Small-Point-LIO 里程计以及 EGO-Planner 路径规划，实现了从感知到规划再到控制的全流程闭环。
+
 🛠 1. 环境依赖 (Prerequisites)
 
 在运行本项目前，请确保您的开发环境已配置以下核心组件：
+
 组件	版本	说明
+
 操作系统	Ubuntu 22.04 LTS	推荐系统版本
+
 ROS2	Humble Hawksbill	机器人操作系统
+
 仿真引擎	Gazebo Harmonic	配合 PX4 使用的仿真环境
+
 通信中间件	Micro-XRCE-DDS	用于 PX4 与 ROS2 的高速数据交换
+
 📂 2. 核心模块说明 (Modules)
 
 项目工作空间包含以下关键功能包：
